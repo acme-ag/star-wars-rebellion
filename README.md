@@ -84,12 +84,14 @@ Empire
 - AT-AT
 - AT-ST
 - 1 Stormtrooper
-Rolls 3 red dice, 3 black dice
+
+Rolls: 3 red dice, 3 black dice
 
 Rebels
 - Air Speeder
 - 3 Rebel Troopers
-Rolls 1 red die, 4 black dice
+
+Rolls: 1 red die, 4 black dice
 
 ### What the Simulator Does
 
