@@ -46,8 +46,7 @@ This isolates core combat mechanics and removes external modifiers.
 
 ![Dice](https://i0.wp.com/www.theboardgamefamily.com/wp-content/uploads/2017/05/StarWarsRebellion_Dice.jpg)
 
-The game uses six-sided dice in two colors: red and black
-(extensions with green dice are excluded for simplicity).
+The game uses six-sided dice in two colors: red and black (extensions with green dice are excluded for simplicity).
 
 Each die has the following sides:
 Outcome           Count
@@ -55,9 +54,11 @@ Direct damage	    1
 Colored hit	      2
 Blank	            2
 Block	            1
+
 ```
 Smaple space: [direct, hit, hit, blank, blank, block]
 ```
+
 Direct damage ignores unit defense color
 Colored hits only affect units with matching defense color
 Block cancels one damage in the current round
