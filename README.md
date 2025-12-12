@@ -74,10 +74,11 @@ Each attack parameter rolls one die of the corresponding color.
 
 **Example**
 
-Unit	                        Defense	    Attack
-Rebel Trooper / Stormtrooper	1 black	    1 black
-Air Speeder / AT-ST	          2 red	      1 red, 1 black
-AT-AT	                        3 red	      2 red, 1 black
+|Unit|Defense|Attack|
+|----|-------|------|
+|Rebel Trooper / Stormtrooper|1 black|1 black|
+|Air Speeder / AT-ST|2 red|1 red, 1 black|
+|AT-AT|3 red|2 red, 1 black|
 
 ![It looks like this](https://images-cdn.fantasyflightgames.com/filer_public/c1/58/c158ce5c-3d88-4b77-a5ab-11167efde4fe/sw03-imperial-faction-sheet.jpg)
 ### Example Combat Setup
