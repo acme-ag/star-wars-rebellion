@@ -49,11 +49,12 @@ This isolates core combat mechanics and removes external modifiers.
 The game uses six-sided dice in two colors: red and black (extensions with green dice are excluded for simplicity).
 
 Each die has the following sides:
-Outcome           Count
-Direct damage	    1
-Colored hit	      2
-Blank	            2
-Block	            1
+|Outcome|Count|
+|-------|-----|
+|Direct damage|1|
+|Colored hit|2|
+|Blank|2|
+|Block|1|
 
 ```
 Smaple space: [direct, hit, hit, blank, blank, block]
