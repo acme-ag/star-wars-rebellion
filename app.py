@@ -39,10 +39,12 @@ unit_types = list(unit_stats.keys())
 
 st.title("Star Wars: Rebellion combat simulator")
 
+
 with st.sidebar:
     st.header("Simulation Setup")
-
-    sim_count = st.number_input("Number of simulations", 1000, 100000, 10000, step=1000)
+    debug_mode = st.checkbox("Show round-by-round battle logs (only works if ≤ 10 simulations)")
+    # sim_count = st.number_input("Number of simulations", 1000, 100000, 10000, step=1000) # we want to allow smaller numbers for debugging
+    sim_count = st.number_input("Number of simulations (1...100000)", min_value=1, max_value=100000, value=10, step=1)
 
     st.subheader("Empire (Attackers)")
     empire_units = defaultdict(int)
@@ -68,10 +70,19 @@ if start:
     from simulation import expand_units, multiple_combat
 
     results = []
+
+    verbose = debug_mode and sim_count <= 10
+
     for _ in range(sim_count):
         attackers = expand_units(Counter(empire_units), unit_stats)
         defenders = expand_units(Counter(rebel_units), unit_stats)
-        combat_result = multiple_combat(attackers, defenders)
+        # combat_result = multiple_combat(attackers, defenders, debug=debug_mode)
+        combat_result = multiple_combat(attackers, defenders, verbose=verbose)
+
+    # for _ in range(sim_count):
+    #     attackers = expand_units(Counter(empire_units), unit_stats)
+    #     defenders = expand_units(Counter(rebel_units), unit_stats)
+    #     combat_result = multiple_combat(attackers, defenders)
         result = (len(combat_result[0]), len(combat_result[1]))  # attackers, defenders
         results.append(result)
 
@@ -101,11 +112,10 @@ if start:
         str)
     outcome_counts = outcome_counts.sort_values(by='Frequency', ascending=False)
 
-    #
-    # # Show histogram
-    st.write("Aggregated statistics")
-
+    # Show histogram
+    st.subheader("Aggregated statistics")
     st.dataframe(outcome_counts)
+    st.write("Example: E2_R0 means 'Empire wins with 2 units left, Rebels -- with no units left'")
 
     plt.figure(figsize=(10, 6))
     plt.bar(outcome_counts['Outcome'], outcome_counts['Frequency'])
