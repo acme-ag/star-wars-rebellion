@@ -86,11 +86,22 @@ def total_dice(attackers, defenders):
 def assign_damage(units, direct_hits, red_hits, black_hits, block_hits):
     updated_units = []
 
+    # block direct hits first -- most dangerous, -- then colored hits.
+    remaining_blocks = block_hits
+
+    direct_remaining = max(direct_hits - remaining_blocks, 0)
+    remaining_blocks = max(remaining_blocks - direct_hits, 0)
+
+    red_remaining = max(red_hits - remaining_blocks, 0)
+    remaining_blocks = max(remaining_blocks - red_hits, 0)
+
+    black_remaining = max(black_hits - remaining_blocks, 0)
+
     # apply blocks
     total_hits = {
-        'direct': max(direct_hits - block_hits, 0),
-        'red': red_hits,
-        'black': black_hits
+        'direct': direct_remaining,
+        'red': red_remaining,
+        'black': black_remaining
     }
 
     for unit in units:
@@ -119,7 +130,7 @@ def assign_damage(units, direct_hits, red_hits, black_hits, block_hits):
     return updated_units
 
 
-def multiple_combat(attackers, defenders):
+def multiple_combat(attackers, defenders, verbose=False):
     # sort to have an order from strongest to weakest units
     sorted_attackers = sorted(attackers, key=lambda unit: unit.get('defense_red', unit.get('defense_black')),
                               reverse=True)
@@ -136,15 +147,29 @@ def multiple_combat(attackers, defenders):
             # unit['hp'] = unit.get('defense_red') or unit.get('defense_black')
             unit['hp'] = unit.get('defense_red') if 'defense_red' in unit else unit.get('defense_black', 0)
 
-    while sorted_attackers and sorted_defenders:
-        # outcomes of total dice for each side: direct, red, black, block
-        (a_red, a_black), (d_red, d_black) = total_dice(sorted_attackers, sorted_defenders)
+    if verbose:
+        debug_container = st.expander("Combat round-by-round debug log")
+    else:
+        debug_container = None
 
-        # outcomes
+    round_num = 1
+    while sorted_attackers and sorted_defenders:
+        (a_red, a_black), (d_red, d_black) = total_dice(sorted_attackers, sorted_defenders)
         a_direct, a_red, a_black, a_block = outcome(a_red, a_black)
         d_direct, d_red, d_black, d_block = outcome(d_red, d_black)
 
         sorted_defenders = assign_damage(sorted_defenders, a_direct, a_red, a_black, d_block)
         sorted_attackers = assign_damage(sorted_attackers, d_direct, d_red, d_black, a_block)
+
+        if debug_container:
+            with debug_container:
+                st.markdown(f"### Round {round_num}")
+                st.text(f"Empire rolls:  direct={a_direct}, red={a_red}, black={a_black}, block={a_block}")
+                st.text(f"Rebels rolls:  direct={d_direct}, red={d_red}, black={d_black}, block={d_block}")
+                st.text(f"Empire remaining: {[u['name'] + '(' + str(u['hp']) + ')' for u in sorted_attackers]}")
+                st.text(f"Rebels remaining: {[u['name'] + '(' + str(u['hp']) + ')' for u in sorted_defenders]}")
+                st.markdown("---")
+
+        round_num += 1
 
     return sorted_attackers, sorted_defenders
